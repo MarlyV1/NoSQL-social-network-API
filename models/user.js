@@ -41,3 +41,7 @@ userSchema
 .get(function () {
     return this.friends.length;
 });
+
+const User = ('user', userSchema);
+
+module.exports = User;
