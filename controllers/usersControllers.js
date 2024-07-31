@@ -13,7 +13,11 @@ module.exports = {
 
     async getOneUser(req, res) {
         try {
-            const singleUser = await User.findOne({ id: req.param.id});
+            const singleUser = await User.findOne({ _id: req.param.id})
+                .select('-__v')
+                .populate('thought')
+                .populate('user');
+
             res.json(singleUser);
         } catch (error) {
             res.status(400).json(message);
@@ -29,5 +33,5 @@ module.exports = {
             res.status(400).json(error);
             console.error(error.message);
         }  
-    }
-}
+    },
+};
