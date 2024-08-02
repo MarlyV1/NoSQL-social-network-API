@@ -50,8 +50,8 @@ module.exports = {
     async deleteThought(req, res) {
         try {
             const thought = await Thought.findByIdAndDelete(req.params.id);
-            const user = await User.findOneAndUpdate({username: thought.username}, {$pull: {thoughts: thought._id}}, {new: true});
-            if(!user) {
+            const user = await User.findOneAndUpdate({ username: thought.username }, { $pull: { thoughts: thought._id } }, { new: true });
+            if (!user) {
                 return res.status(404).json('No user found with that username');
             }
             res.json(thought);
@@ -60,5 +60,29 @@ module.exports = {
             console.error(error.message);
         }
     },
+    async addReaction(req, res) {
+        try {
+            const thought = await Thought.findByIdAndUpdate(req.params.id, { $addToSet: { reactions: req.body } }, { runValidators: true, new: true });
+            if (!thought) {
+                return res.status(404).json('No thought found with that ID');
+            }
+            res.json(thought)
+        } catch (error) {
+            res.status(400).json(error);
+            console.error(error.message);
+        }
+    },
+    async removeReaction(req, res) {
+        try {
+            const thought = await Thought.findByIdAndUpdate(req.params.id, { $pull: { reactions: { reactionId: req.params.reactionId } } }, { new: true });
+            if (!thought) {
+                return res.status(404).json('No thought found with that ID');
+            }
+            res.json(thought)
+        } catch (error) {
+            res.status(400).json(error);
+            console.error(error.message);
+        }
+    }
 
 };
