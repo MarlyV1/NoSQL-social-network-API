@@ -19,15 +19,17 @@ const thoughtSchema = new Schema(
             type: String,
             required: true
         },
-        reactions: {
-
-        }
+        reactions: [
+            reactionSchema
+        ]
     },
     {
         timestamps: true,
         toJSON: {
-            virtuals: true
-        }
+            virtuals: true,
+            getters: true
+        },
+        id: false
     }
 );
 
@@ -37,6 +39,6 @@ thoughtSchema
     return this.reactions.length;
 });
 
-const Thoughts = ('thought', thoughtSchema); 
+const Thought = model('thought', thoughtSchema); 
 
-module.exports = Thoughts;
+module.exports = Thought;
