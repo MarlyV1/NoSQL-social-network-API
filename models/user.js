@@ -12,12 +12,7 @@ const userSchema = new Schema(
             type: String,
             required: true,
             unique: true,
-            validate: {
-                validator: (value) => {
-                    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)
-                },
-                message: 'Email validation failed'
-            }
+            match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Email validation failed!'],
         },
         thoughts: [{
             type: Schema.Types.ObjectId,
@@ -42,6 +37,6 @@ userSchema
     return this.friends.length;
 });
 
-const User = ('user', userSchema);
+const User = model('user', userSchema);
 
 module.exports = User;
