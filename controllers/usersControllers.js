@@ -34,4 +34,34 @@ module.exports = {
             console.error(error.message);
         }  
     },
+    async updateUser(req, res) {
+        try {
+            const user = await User.findByIdAndUpdate(req.params.id, {$set: req.body}, {runValidators: true, new: true})
+            if(!user) {
+                return res.status(404).json('No user found with that ID')
+            }
+            res.json(user);
+        } catch (error) {
+            res.status(400).json(error);
+            console.error(error.message);
+        }
+    },
+    async deleteUser(req, res) {
+        try {
+            const deletedUser = await User.findByIdAndDelete(req.params.id);
+            if(!deletedUser) {
+                return res.status(404).json('No user found with that ID')
+            }
+            res.json(deletedUser);
+
+
+        } catch (error) {
+            res.status(400).json(error);
+            console.error(error.message);
+        }
+    },
+
+
+
+
 };
