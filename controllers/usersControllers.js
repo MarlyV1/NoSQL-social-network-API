@@ -10,21 +10,21 @@ module.exports = {
             console.error(error.message);
         }
     },
-
     async getOneUser(req, res) {
         try {
-            const singleUser = await User.findOne({ _id: req.param.id })
+            const singleUser = await User.findOne({ _id: req.params.id})
                 .select('-__v')
-                .populate('thought')
-                .populate('user');
-
+                .populate('thoughts')
+                .populate('friends');
+            if(!singleUser) {
+                return res.status(404).json('No user found with that ID')
+            }
             res.json(singleUser);
         } catch (error) {
-            res.status(400).json(message);
+            res.status(400).json(error.message);
             console.error(error.message);
-        }
+        }  
     },
-
     async createUser(req, res) {
         try {
             const newUser = await User.create(req.body);
